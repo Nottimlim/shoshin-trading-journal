@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Shoshin Trading Journal</title>
+</head>
+<body>
+  <h1>Welcome to Shoshin Trading Journal</h1>
+  <% if (user) { %>
+    <p>Hello, <%= user.username %></p>
+    <a href="/auth/logout">Logout</a>
+  <% } else { %>
+    <a href="/auth/login">Login</a>
+    <a href="/auth/signup">Sign Up</a>
+  <% } %>
+</body>
+</html>
