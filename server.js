@@ -13,20 +13,34 @@ const expressLayouts = require('express-ejs-layouts');
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.on('connected', () => {
     console.log(`Connected to MongoDB ${mongoose.connection.name}.`);
-  });
+});
   
+// Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(expressLayouts);
-app.set('layout', 'layouts/main');
+
+// Session middleware
 app.use(session({
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: true,
+    cookie: { secure: process.env.NODE_ENV === 'production' }
     }));
 
+app.use(expressLayouts);
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.set('layout', 'layouts/main');
+
+// Middleware to make user available to all templates
+app.use((req, res, next) => {
+    res.locals.user = req.session.user || null;
+    next();
+});
+
+// Routes
 app.use('/', require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
 app.use('/trades', require('./routes/trades'));
