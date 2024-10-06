@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shoshin Trading Journal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold">Shoshin Trading Journal</a>
+            <div>
+                <a href="/dashboard" class="mr-4">Dashboard</a>
+                <a href="/trades" class="mr-4">Trades</a>
+                <% if (locals.user) { %>
+                    <a href="/auth/logout">Logout</a>
+                <% } else { %>
+                    <a href="/auth/login" class="mr-4">Login</a>
+                    <a href="/auth/signup">Signup</a>
+                <% } %>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto mt-8 px-4">
+        <%- body %>
+    </main>
+
+    <footer class="bg-gray-200 text-center p-4 mt-8">
+        <p>&copy; 2023 Shoshin Trading Journal. All rights reserved.</p>
+    </footer>
+</body>
+</html>

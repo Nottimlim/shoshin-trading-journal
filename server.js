@@ -9,6 +9,8 @@ const morgan = require('morgan');
 const port = process.env.PORT ? process.env.PORT : '3000';
 const path = require('path')
 const expressLayouts = require('express-ejs-layouts');
+const tradeRoutes = require('./routes/trades');
+const dashboardRoutes = require('./routes/dashboard');
 
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.on('connected', () => {
@@ -30,9 +32,12 @@ app.use(session({
     }));
 
 app.use(expressLayouts);
+app.set('layout', 'layout'); 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.set('layout', 'layouts/main');
+app.use('/trades', tradeRoutes);
+app.use('/dashboard', dashboardRoutes);
 
 // Middleware to make user available to all templates
 app.use((req, res, next) => {

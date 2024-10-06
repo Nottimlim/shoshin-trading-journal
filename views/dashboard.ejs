@@ -1,0 +1,58 @@
+<h1 class="text-3xl font-bold mb-6">Trading Dashboard</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  <div class="bg-white p-4 rounded shadow">
+    <h2 class="text-xl font-semibold mb-2">Total Trades</h2>
+    <p class="text-3xl font-bold"><%= totalTrades %></p>
+  </div>
+  <div class="bg-white p-4 rounded shadow">
+    <h2 class="text-xl font-semibold mb-2">Win Rate</h2>
+    <p class="text-3xl font-bold"><%= winRate %>%</p>
+  </div>
+  <div class="bg-white p-4 rounded shadow">
+    <h2 class="text-xl font-semibold mb-2">Total P/L</h2>
+    <p class="text-3xl font-bold <%= totalProfitLoss >= 0 ? 'text-green-600' : 'text-red-600' %>">
+      $<%= totalProfitLoss.toFixed(2) %>
+    </p>
+  </div>
+  <div class="bg-white p-4 rounded shadow">
+    <h2 class="text-xl font-semibold mb-2">Open Trades</h2>
+    <p class="text-3xl font-bold"><%= openTrades %></p>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+  <div class="bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-semibold mb-4">Recent Trades</h2>
+    <% if (recentTrades.length === 0) { %>
+      <p>No recent trades.</p>
+    <% } else { %>
+      <ul>
+        <% recentTrades.forEach(trade => { %>
+          <li class="mb-2">
+            <span class="font-semibold"><%= trade.symbol %></span> - 
+            <%= trade.entryDate.toLocaleDateString() %> - 
+            <span class="<%= trade.outcome === 'win' ? 'text-green-600' : trade.outcome === 'loss' ? 'text-red-600' : 'text-gray-600' %>">
+              <%= trade.outcome.toUpperCase() %>
+            </span>
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </div>
+
+  <div class="bg-white p-6 rounded shadow">
+    <h2 class="text-2xl font-semibold mb-4">Top Strategies</h2>
+    <% if (topStrategies.length === 0) { %>
+      <p>No strategies recorded yet.</p>
+    <% } else { %>
+      <ul>
+        <% topStrategies.forEach(({ strategy, count }) => { %>
+          <li class="mb-2">
+            <span class="font-semibold"><%= strategy %></span>: <%= count %> trades
+          </li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </div>
+</div>
