@@ -8,6 +8,7 @@ const methodOverride = require('method-override');
 const morgan = require('morgan');
 const port = process.env.PORT ? process.env.PORT : '3000';
 const path = require('path')
+const expressLayouts = require('express-ejs-layouts');
 
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.on('connected', () => {
@@ -18,6 +19,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(expressLayouts);
+app.set('layout', 'layouts/main');
 app.use(session({
       secret: process.env.SESSION_SECRET,
       resave: false,

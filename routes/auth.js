@@ -3,6 +3,10 @@ const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 
+router.get('/login', (req, res) => {
+    res.render('login');
+  });
+
 router.get('/signup', (req, res) => {
   res.render('signup');
 });
@@ -16,10 +20,6 @@ router.post('/signup', async (req, res) => {
   } catch (error) {
     res.render('signup', { error: 'Error creating user' });
   }
-});
-
-router.get('/login', (req, res) => {
-  res.render('login');
 });
 
 router.post('/login', async (req, res) => {

@@ -4,13 +4,20 @@
   <title>Shoshin Trading Journal</title>
 </head>
 <body>
-  <h1>Welcome to Shoshin Trading Journal</h1>
+<div class="max-w-md mx-auto mt-10">
+  <h1 class="text-3xl font-bold mb-6 text-center">Welcome to Shoshin Trading Journal</h1>
   <% if (user) { %>
-    <p>Hello, <%= user.username %></p>
-    <a href="/auth/logout">Logout</a>
+    <p class="mb-4 text-center">Hello, <span class="font-semibold"><%= user.username %></span></p>
+    <div class="text-center">
+      <a href="/auth/logout" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">Logout</a>
+    </div>
   <% } else { %>
-    <a href="/auth/login">Login</a>
-    <a href="/auth/signup">Sign Up</a>
+    <div class="flex justify-center space-x-4">
+      <a href="/auth/login" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">Login</a>
+      <a href="/auth/signup" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">Sign Up</a>
+    </div>
   <% } %>
+</div>
 </body>
 </html>
+a
