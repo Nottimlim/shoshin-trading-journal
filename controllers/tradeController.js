@@ -15,42 +15,21 @@ exports.getNewTradeForm = (req, res) => {
 };
 
 exports.createTrade = async (req, res) => {
-  console.log('Request body:', req.body);
-  console.log('User ID:', req.session.user.id);
   try {
-    const { entryPrice, exitPrice, profitLoss: inputProfitLoss, ...otherFields } = req.body;
+    const { entryPrice, exitPrice, profitLoss: inputProfitLoss, tradeType, entryDate, exitDate, ...otherFields } = req.body;
     
-    let profitLoss, outcome;
-
-    if (inputProfitLoss !== undefined && inputProfitLoss !== '') {
-      profitLoss = parseFloat(inputProfitLoss);
-    } else if (exitPrice) {
-      profitLoss = parseFloat(exitPrice) - parseFloat(entryPrice);
-    } else {
-      profitLoss = 0;
-    }
-
-    if (!exitPrice) {
-      outcome = 'open';
-    } else if (profitLoss > 0) {
-      outcome = 'win';
-    } else if (profitLoss < 0) {
-      outcome = 'loss';
-    } else {
-      outcome = 'breakeven';
-    }
-
-    const trade = new Trade({
+    const newTrade = new Trade({
       ...otherFields,
+      user: req.session.user.id,
       entryPrice: parseFloat(entryPrice),
       exitPrice: exitPrice ? parseFloat(exitPrice) : undefined,
-      profitLoss,
-      outcome,
-      user: req.session.user.id
+      profitLoss: inputProfitLoss ? parseFloat(inputProfitLoss) : 0,
+      tradeType,
+      entryDate,
+      exitDate: exitDate || undefined
     });
 
-    console.log('New trade object:', trade);
-    await trade.save();
+    await newTrade.save();
     res.redirect('/trades');
   } catch (error) {
     console.error('Error creating trade:', error);
@@ -72,64 +51,57 @@ exports.getTradeDetails = async (req, res) => {
 };
 
 exports.getEditTradeForm = async (req, res) => {
-  try {
-    const trade = await Trade.findOne({ _id: req.params.id, user: req.session.user.id });
-    if (!trade) {
-      return res.status(404).render('error', { error: 'Trade not found' });
+    try {
+      const trade = await Trade.findOne({ _id: req.params.id, user: req.session.user.id });
+      if (!trade) {
+        return res.status(404).render('error', { error: 'Trade not found' });
+      }
+      
+      // Convert dates to YYYY-MM-DD format for the input[type="date"]
+      const formattedTrade = {
+        ...trade.toObject(),
+        entryDate: trade.entryDate ? trade.entryDate.toISOString().split('T')[0] : '',
+        exitDate: trade.exitDate ? trade.exitDate.toISOString().split('T')[0] : '',
+        profitLoss: trade.profitLoss !== undefined ? trade.profitLoss : ''
+      };
+      
+      res.render('trades/edit', { trade: formattedTrade });
+    } catch (error) {
+      console.error('Error fetching trade for edit:', error);
+      res.status(500).render('error', { error: 'Error fetching trade for edit' });
     }
-    res.render('trades/edit', { trade });
-  } catch (error) {
-    console.error('Error fetching trade for edit:', error);
-    res.status(500).render('error', { error: 'Error fetching trade for edit' });
-  }
-};
+  };
 
-exports.updateTrade = async (req, res) => {
-  try {
-    const { entryPrice, exitPrice, profitLoss: inputProfitLoss, ...otherFields } = req.body;
-    
-    let profitLoss, outcome;
-
-    if (inputProfitLoss !== undefined && inputProfitLoss !== '') {
-      profitLoss = parseFloat(inputProfitLoss);
-    } else if (exitPrice) {
-      profitLoss = parseFloat(exitPrice) - parseFloat(entryPrice);
-    } else {
-      profitLoss = 0;
+  exports.updateTrade = async (req, res) => {
+    try {
+      const { entryPrice, exitPrice, profitLoss, tradeType, entryDate, exitDate, ...otherFields } = req.body;
+      
+      const updatedTrade = await Trade.findOneAndUpdate(
+        { _id: req.params.id, user: req.session.user.id },
+        {
+          ...otherFields,
+          entryPrice: parseFloat(entryPrice),
+          exitPrice: exitPrice ? parseFloat(exitPrice) : undefined,
+          profitLoss: profitLoss ? parseFloat(profitLoss) : undefined,
+          tradeType,
+          entryDate,
+          exitDate: exitDate || undefined
+        },
+        { new: true, runValidators: true }
+      );
+  
+      if (!updatedTrade) {
+        return res.status(404).render('error', { error: 'Trade not found' });
+      }
+  
+      res.redirect(`/trades/${updatedTrade._id}`);
+    } catch (error) {
+      console.error('Error updating trade:', error);
+      // Fetch the trade again to re-render the form with the current data
+      const trade = await Trade.findById(req.params.id);
+      res.status(400).render('trades/edit', { trade, error: 'Error updating trade' });
     }
-
-    if (!exitPrice) {
-      outcome = 'open';
-    } else if (profitLoss > 0) {
-      outcome = 'win';
-    } else if (profitLoss < 0) {
-      outcome = 'loss';
-    } else {
-      outcome = 'breakeven';
-    }
-
-    const updatedTrade = await Trade.findOneAndUpdate(
-      { _id: req.params.id, user: req.session.user.id },
-      {
-        ...otherFields,
-        entryPrice: parseFloat(entryPrice),
-        exitPrice: exitPrice ? parseFloat(exitPrice) : undefined,
-        profitLoss,
-        outcome
-      },
-      { new: true, runValidators: true }
-    );
-
-    if (!updatedTrade) {
-      return res.status(404).render('error', { error: 'Trade not found' });
-    }
-
-    res.redirect(`/trades/${updatedTrade._id}`);
-  } catch (error) {
-    console.error('Error updating trade:', error);
-    res.status(400).render('trades/edit', { trade: req.body, error: 'Error updating trade' });
-  }
-};
+  };
 
 exports.deleteTrade = async (req, res) => {
   try {

@@ -23,36 +23,49 @@
         </div>
     </div>
 
-    <!-- Recent Trades -->
-    <div class="bg-white p-6 rounded shadow mb-8">
-        <h2 class="text-2xl font-semibold mb-4">Recent Trades</h2>
-        <% if (recentTrades && recentTrades.length > 0) { %>
-            <table class="min-w-full">
-                <thead>
+<!-- Recent Trades -->
+<div class="bg-white p-6 rounded shadow mb-8">
+    <h2 class="text-2xl font-semibold mb-4">Recent Trades</h2>
+    <% if (recentTrades && recentTrades.length > 0) { %>
+        <table class="min-w-full">
+            <thead>
+                <tr>
+                    <th class="px-4 py-2">Type</th>
+                    <th class="px-4 py-2">Symbol</th>
+                    <th class="px-4 py-2">Entry Date</th>
+                    <th class="px-4 py-2">Exit Date</th>
+                    <th class="px-4 py-2">Outcome</th>
+                    <th class="px-4 py-2">P/L</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% recentTrades.forEach(trade => { %>
                     <tr>
-                        <th class="px-4 py-2">Symbol</th>
-                        <th class="px-4 py-2">Entry Date</th>
-                        <th class="px-4 py-2">Exit Date</th>
-                        <th class="px-4 py-2">Outcome</th>
-                        <th class="px-4 py-2">P/L</th>
+                        <td class="border px-4 py-2">
+                            <% if (trade.tradeType === 'long') { %>
+                                <svg class="w-6 h-6 text-green-500 inline-block" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 17L9 11L13 15L21 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M14 7H21V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            <% } else { %>
+                                <svg class="w-6 h-6 text-red-500 inline-block" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 7L9 13L13 9L21 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M14 17H21V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            <% } %>
+                        </td>
+                        <td class="border px-4 py-2"><%= trade.symbol %></td>
+                        <td class="border px-4 py-2"><%= trade.entryDate.toLocaleDateString() %></td>
+                        <td class="border px-4 py-2"><%= trade.exitDate ? trade.exitDate.toLocaleDateString() : 'Open' %></td>
+                        <td class="border px-4 py-2 capitalize"><%= trade.outcome %></td>
+                        <td class="border px-4 py-2 <%= trade.profitLoss >= 0 ? 'text-green-600' : 'text-red-600' %>">
+                            $<%= (trade.profitLoss !== undefined) ? trade.profitLoss.toFixed(2) : 'N/A' %>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    <% recentTrades.forEach(trade => { %>
-                        <tr>
-                            <td class="border px-4 py-2"><%= trade.symbol %></td>
-                            <td class="border px-4 py-2"><%= trade.entryDate.toLocaleDateString() %></td>
-                            <td class="border px-4 py-2"><%= trade.exitDate ? trade.exitDate.toLocaleDateString() : 'Open' %></td>
-                            <td class="border px-4 py-2"><%= trade.outcome %></td>
-                            <td class="border px-4 py-2 <%= trade.profitLoss >= 0 ? 'text-green-600' : 'text-red-600' %>">
-                                $<%= (trade.profitLoss !== undefined) ? trade.profitLoss.toFixed(2) : 'N/A' %>
-                            </td>
-                        </tr>
-                    <% }) %>
-                </tbody>
-            </table>
-        <% } else { %>
-            <p>No recent trades available.</p>
-        <% } %>
-    </div>
+                <% }) %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>No recent trades available.</p>
+    <% } %>
 </div>

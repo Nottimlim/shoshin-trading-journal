@@ -33,3 +33,4 @@ router.delete('/:id', isAuthenticated, tradeController.deleteTrade);
 
 module.exports = router;
 
+

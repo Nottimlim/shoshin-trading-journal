@@ -26,11 +26,16 @@ const TradeSchema = new mongoose.Schema({
   },
   profitLoss: {
     type: Number,
-    required: true
+    default: undefined
   },
   outcome: {
     type: String,
     enum: ['win', 'loss', 'breakeven', 'open'],
+    required: true
+  },
+  tradeType: {
+    type: String,
+    enum: ['long', 'short'],
     required: true
   },
   riskRewardRatio: {

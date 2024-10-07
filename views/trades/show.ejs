@@ -7,6 +7,21 @@
   <p><strong>Exit Price:</strong> <%= trade.exitPrice ? `$${trade.exitPrice.toFixed(2)}` : 'N/A' %></p>
   <p><strong>Exit Date:</strong> <%= trade.exitDate ? trade.exitDate.toLocaleDateString() : 'N/A' %></p>
   <p><strong>Profit/Loss:</strong> <span class="<%= trade.profitLoss >= 0 ? 'text-green-600' : 'text-red-600' %>"><%= trade.profitLoss ? `$${trade.profitLoss.toFixed(2)}` : 'N/A' %></span></p>
+  <p><strong>Trade Type:</strong> 
+    <% if (trade.tradeType === 'long') { %>
+      Long 
+      <svg class="w-6 h-6 text-green-500 inline-block" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 17L9 11L13 15L21 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M14 7H21V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    <% } else { %>
+      Short 
+      <svg class="w-6 h-6 text-red-500 inline-block" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 7L9 13L13 9L21 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M14 17H21V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    <% } %>
+  </p>
   <p><strong>Risk/Reward Ratio:</strong> <%= trade.riskRewardRatio %></p>
   <p><strong>Notes:</strong> <%= trade.notes %></p>
 </div>
