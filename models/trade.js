@@ -17,10 +17,6 @@ const TradeSchema = new mongoose.Schema({
   exitPrice: {
     type: Number
   },
-  quantity: {
-    type: Number,
-    required: true
-  },
   entryDate: {
     type: Date,
     required: true
@@ -28,20 +24,42 @@ const TradeSchema = new mongoose.Schema({
   exitDate: {
     type: Date
   },
-  strategy: String,
-  notes: String,
+  profitLoss: {
+    type: Number,
+    required: true
+  },
   outcome: {
     type: String,
     enum: ['win', 'loss', 'breakeven', 'open'],
-    default: 'open'
+    required: true
   },
-  profitLoss: Number,
   riskRewardRatio: {
     type: String,
     required: true
-  }
+  },
+  notes: String
 }, {
   timestamps: true
+});
+
+// Pre-save hook to automatically set the outcome based on profitLoss
+TradeSchema.pre('save', function(next) {
+  if (this.profitLoss > 0) {
+    this.outcome = 'win';
+  } else if (this.profitLoss < 0) {
+    this.outcome = 'loss';
+  } else {
+    this.outcome = 'breakeven';
+  }
+  next();
+});
+
+// Virtual property to get formatted profitLoss (optional)
+TradeSchema.virtual('formattedProfitLoss').get(function() {
+  return this.profitLoss.toLocaleString('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
 });
 
 module.exports = mongoose.model('Trade', TradeSchema);

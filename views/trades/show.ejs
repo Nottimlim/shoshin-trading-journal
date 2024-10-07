@@ -4,7 +4,6 @@
   <p><strong>Symbol:</strong> <%= trade.symbol %></p>
   <p><strong>Entry Price:</strong> $<%= trade.entryPrice.toFixed(2) %></p>
   <p><strong>Entry Date:</strong> <%= trade.entryDate.toLocaleDateString() %></p>
-  <p><strong>Quantity:</strong> <%= trade.quantity %></p>
   <p><strong>Exit Price:</strong> <%= trade.exitPrice ? `$${trade.exitPrice.toFixed(2)}` : 'N/A' %></p>
   <p><strong>Exit Date:</strong> <%= trade.exitDate ? trade.exitDate.toLocaleDateString() : 'N/A' %></p>
   <p><strong>Profit/Loss:</strong> <span class="<%= trade.profitLoss >= 0 ? 'text-green-600' : 'text-red-600' %>"><%= trade.profitLoss ? `$${trade.profitLoss.toFixed(2)}` : 'N/A' %></span></p>

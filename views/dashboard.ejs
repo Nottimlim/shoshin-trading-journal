@@ -45,7 +45,7 @@
                             <td class="border px-4 py-2"><%= trade.exitDate ? trade.exitDate.toLocaleDateString() : 'Open' %></td>
                             <td class="border px-4 py-2"><%= trade.outcome %></td>
                             <td class="border px-4 py-2 <%= trade.profitLoss >= 0 ? 'text-green-600' : 'text-red-600' %>">
-                                $<%= trade.profitLoss.toFixed(2) %>
+                                $<%= (trade.profitLoss !== undefined) ? trade.profitLoss.toFixed(2) : 'N/A' %>
                             </td>
                         </tr>
                     <% }) %>
