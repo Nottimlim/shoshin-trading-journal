@@ -5,42 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shoshin Trading Journal</title>
     <link href="/css/output.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <style>
+        #sidebar {
+            position: fixed;
+            left: -16rem;
+            transition: left 0.3s ease-in-out;
+            height: 100vh;
+            z-index: 40;
+        }
+        #sidebar.open {
+            left: 0;
+        }
+        #content {
+            margin-left: 0;
+            transition: margin-left 0.3s ease-in-out;
+            width: 100%;
+        }
+        #content.sidebar-open {
+            margin-left: 16rem;
+            width: calc(100% - 16rem);
+        }
+    </style>
 </head>
 <body class="bg-gray-100">
-    <div x-data="{ sidebarOpen: false }" class="flex h-screen overflow-hidden">
+    <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
-        <div 
-            :class="{'translate-x-0 ease-out': sidebarOpen, '-translate-x-full ease-in': !sidebarOpen}"
-            class="bg-blue-600 text-white w-64 space-y-6 py-7 px-2 absolute inset-y-0 left-0 transform transition duration-200 ease-in-out z-30"
-        >
-            <nav>
-                <a href="/dashboard" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">Dashboard</a>
-                <a href="/trades" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">Trades</a>
-                <a href="/trades/new" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">New Trade</a>
-                <% if (user) { %>
-                    <a href="/auth/logout" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">Logout</a>
-                <% } else { %>
-                    <a href="/auth/login" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">Login</a>
-                    <a href="/auth/signup" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700">Sign Up</a>
-                <% } %>
-            </nav>
+        <div id="sidebar" class="bg-blue-600 text-white w-64 flex flex-col">
+            <div class="py-7 px-4 flex-grow">
+                <h2 class="text-2xl font-bold mb-4 text-center mt-8">Menu</h2>
+                <hr class="border-t border-white w-full mb-6">
+                <nav class="w-full">
+                    <a href="/dashboard" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 text-center mb-4">Dashboard</a>
+                    <a href="/trades" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 text-center mb-4">Trades</a>
+                    <a href="/trades/new" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 text-center mb-4">New Trade</a>
+                    <% if (user) { %>
+                        <a href="/auth/logout" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 text-center mb-4">Logout</a>
+                    <% } else { %>
+                        <a href="/auth/login" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 text-center mb-4">Login</a>
+                        <a href="/auth/signup" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-700 text-center mb-4">Sign Up</a>
+                    <% } %>
+                </nav>
+            </div>
         </div>
 
         <!-- Content area -->
-        <div 
-            :class="{'ml-64': sidebarOpen, 'ml-0': !sidebarOpen}"
-            class="flex-1 flex flex-col overflow-hidden transition-all duration-200 ease-in-out"
-        >
+        <div id="content" class="flex-1 flex flex-col overflow-hidden">
             <!-- Top bar -->
             <header class="bg-white shadow-md">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex items-center">
-                    <button @click="sidebarOpen = !sidebarOpen" class="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600 mr-4">
+                <div class="max-w-7xl mx-auto py-6 px-3 sm:px-4 lg:px-6 flex items-center justify-between">
+                    <button id="sidebarToggle" class="text-gray-500 hover:text-gray-600 focus:outline-none focus:text-gray-600">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
-                    <h1 class="text-3xl font-bold text-gray-900">Shoshin Trading Journal</h1>
+                    <a href="/" class="absolute left-1/2 transform -translate-x-1/2 text-3xl font-bold text-gray-900 hover:text-gray-700 transition duration-150 ease-in-out">
+                        Shoshin Trading Journal
+                    </a>
+                    <div class="w-6"></div> <!-- This empty div balances the space taken by the button -->
                 </div>
             </header>
 
@@ -52,5 +73,18 @@
             </main>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const content = document.getElementById('content');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+    
+            sidebarToggle.addEventListener('click', function() {
+                sidebar.classList.toggle('open');
+                content.classList.toggle('sidebar-open');
+            });
+        });
+    </script>
 </body>
 </html>
