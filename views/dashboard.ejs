@@ -1,100 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shoshin Trading Journal</title>
-    <link href="/css/output.css" rel="stylesheet">
-    <script src="/js/alpine.js" defer></script>
-</head>
-<body class="bg-gray-100" x-data="{ sidebarOpen: true }">
-    <% if (!isLoginPage) { %>
-    <div class="flex h-screen overflow-hidden">
-        <!-- Sidebar -->
-        <div :class="{'translate-x-0 ease-out': sidebarOpen, '-translate-x-full ease-in': !sidebarOpen}" class="fixed z-30 inset-y-0 left-0 w-64 transition duration-300 transform bg-blue-600 overflow-y-auto lg:translate-x-0 lg:static lg:inset-0">
-            <!-- Sidebar content -->
-            <nav class="mt-10">
-                <!-- Navigation items -->
-            </nav>
+<div class="container mx-auto px-6 py-8">
+    <h1 class="text-3xl font-semibold mb-6">Trading Dashboard</h1>
+    
+    <!-- Dashboard Statistics -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="bg-white p-4 rounded shadow">
+            <h2 class="text-xl font-semibold mb-2">Total Trades</h2>
+            <p class="text-3xl font-bold"><%= totalTrades %></p>
         </div>
-
-        <div class="flex-1 flex flex-col overflow-hidden">
-            <!-- Navbar -->
-            <header class="flex justify-between items-center py-4 px-6 bg-white border-b-4 border-blue-600">
-                <!-- Navbar content -->
-            </header>
-            
-            <!-- Main content -->
-            <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
-                <div class="container mx-auto px-6 py-8">
-                    <h1 class="text-3xl font-bold mb-6">Trading Dashboard</h1>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-  <div class="bg-white p-4 rounded shadow">
-                            <h2 class="text-xl font-semibold mb-2">Total Trades</h2>
-                            <p class="text-3xl font-bold"><%= totalTrades %></p>
-  </div>
-  <div class="bg-white p-4 rounded shadow">
-                            <h2 class="text-xl font-semibold mb-2">Win Rate</h2>
-                            <p class="text-3xl font-bold"><%= winRate %>%</p>
-  </div>
-  <div class="bg-white p-4 rounded shadow">
-                            <h2 class="text-xl font-semibold mb-2">Total P/L</h2>
-                            <p class="text-3xl font-bold <%= totalProfitLoss >= 0 ? 'text-green-600' : 'text-red-600' %>">
-                                $<%= totalProfitLoss.toFixed(2) %>
-                            </p>
-  </div>
-                        <div class="bg-white p-4 rounded shadow">
-                            <h2 class="text-xl font-semibold mb-2">Open Trades</h2>
-                            <p class="text-3xl font-bold"><%= openTrades %></p>
-</div>
-  </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-  <div class="bg-white p-6 rounded shadow">
-                            <h2 class="text-2xl font-semibold mb-4">Recent Trades</h2>
-                            <% if (recentTrades.length === 0) { %>
-                                <p>No recent trades.</p>
-    <% } else { %>
-      <ul>
-                                    <% recentTrades.forEach(trade => { %>
-          <li class="mb-2">
-                                            <span class="font-semibold"><%= trade.symbol %></span> - 
-                                            <%= trade.entryDate.toLocaleDateString() %> - 
-                                            <span class="<%= trade.outcome === 'win' ? 'text-green-600' : trade.outcome === 'loss' ? 'text-red-600' : 'text-gray-600' %>">
-                                                <%= trade.outcome.toUpperCase() %>
-                                            </span>
-          </li>
-        <% }) %>
-      </ul>
-    <% } %>
-  </div>
-
-                        <div class="bg-white p-6 rounded shadow">
-                            <h2 class="text-2xl font-semibold mb-4">Top Strategies</h2>
-                            <% if (topStrategies.length === 0) { %>
-                                <p>No strategies recorded yet.</p>
-                            <% } else { %>
-                                <ul>
-                                    <% topStrategies.forEach(({ strategy, count }) => { %>
-                                        <li class="mb-2">
-                                            <span class="font-semibold"><%= strategy %></span>: <%= count %> trades
-                                        </li>
-                                    <% }) %>
-                                </ul>
-                            <% } %>
-</div>
-                    </div>
-                </div>
-            </main>
+        <div class="bg-white p-4 rounded shadow">
+            <h2 class="text-xl font-semibold mb-2">Win Rate</h2>
+            <p class="text-3xl font-bold"><%= winRate %>%</p>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+            <h2 class="text-xl font-semibold mb-2">Total P/L</h2>
+            <p class="text-3xl font-bold <%= totalProfitLoss >= 0 ? 'text-green-600' : 'text-red-600' %>">
+                $<%= totalProfitLoss.toFixed(2) %>
+            </p>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+            <h2 class="text-xl font-semibold mb-2">Open Trades</h2>
+            <p class="text-3xl font-bold"><%= openTrades %></p>
         </div>
     </div>
-    <% } else { %>
-    <div class="flex items-center justify-center min-h-screen">
-        <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-            <%- body %>
-        </div>
+
+    <!-- Recent Trades -->
+    <div class="bg-white p-6 rounded shadow mb-8">
+        <h2 class="text-2xl font-semibold mb-4">Recent Trades</h2>
+        <% if (recentTrades && recentTrades.length > 0) { %>
+            <table class="min-w-full">
+                <thead>
+                    <tr>
+                        <th class="px-4 py-2">Symbol</th>
+                        <th class="px-4 py-2">Entry Date</th>
+                        <th class="px-4 py-2">Exit Date</th>
+                        <th class="px-4 py-2">Outcome</th>
+                        <th class="px-4 py-2">P/L</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% recentTrades.forEach(trade => { %>
+                        <tr>
+                            <td class="border px-4 py-2"><%= trade.symbol %></td>
+                            <td class="border px-4 py-2"><%= trade.entryDate.toLocaleDateString() %></td>
+                            <td class="border px-4 py-2"><%= trade.exitDate ? trade.exitDate.toLocaleDateString() : 'Open' %></td>
+                            <td class="border px-4 py-2"><%= trade.outcome %></td>
+                            <td class="border px-4 py-2 <%= trade.profitLoss >= 0 ? 'text-green-600' : 'text-red-600' %>">
+                                $<%= trade.profitLoss.toFixed(2) %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p>No recent trades available.</p>
+        <% } %>
     </div>
-    <% } %>
-</body>
-</html>
+</div>

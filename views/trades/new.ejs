@@ -12,28 +12,33 @@
   </div>
 
   <div class="mb-4">
-    <label for="quantity" class="block text-gray-700 text-sm font-bold mb-2">Quantity:</label>
-    <input type="number" id="quantity" name="quantity" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-  </div>
-
-  <div class="mb-4">
     <label for="entryDate" class="block text-gray-700 text-sm font-bold mb-2">Entry Date:</label>
     <input type="date" id="entryDate" name="entryDate" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
   </div>
 
   <div class="mb-4">
-    <label for="riskRewardRatio" class="block text-gray-700 text-sm font-bold mb-2">Risk/Reward Ratio:</label>
-    <input type="text" id="riskRewardRatio" name="riskRewardRatio" placeholder="e.g., 1:2" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+    <label for="quantity" class="block text-gray-700 text-sm font-bold mb-2">Quantity:</label>
+    <input type="number" id="quantity" name="quantity" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
   </div>
 
   <div class="mb-4">
-    <label for="strategy" class="block text-gray-700 text-sm font-bold mb-2">Strategy:</label>
-    <input type="text" id="strategy" name="strategy" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+    <label for="exitPrice" class="block text-gray-700 text-sm font-bold mb-2">Exit Price (optional):</label>
+    <input type="number" id="exitPrice" name="exitPrice" step="0.01" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+  </div>
+
+  <div class="mb-4">
+    <label for="exitDate" class="block text-gray-700 text-sm font-bold mb-2">Exit Date (optional):</label>
+    <input type="date" id="exitDate" name="exitDate" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+  </div>
+
+  <div class="mb-4">
+    <label for="riskRewardRatio" class="block text-gray-700 text-sm font-bold mb-2">Risk/Reward Ratio:</label>
+    <input type="text" id="riskRewardRatio" name="riskRewardRatio" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="e.g., 1:2">
   </div>
 
   <div class="mb-4">
     <label for="notes" class="block text-gray-700 text-sm font-bold mb-2">Notes:</label>
-    <textarea id="notes" name="notes" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+    <textarea id="notes" name="notes" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" rows="4"></textarea>
   </div>
 
   <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Add Trade</button>

@@ -1,55 +1,57 @@
 const express = require('express');
 const session = require('express-session');
-const dotenv = require('dotenv');
-dotenv.config();
-const app = express();
 const mongoose = require('mongoose');
-const methodOverride = require('method-override');
-const morgan = require('morgan');
-const port = process.env.PORT ? process.env.PORT : '3000';
-const path = require('path')
+const MongoStore = require('connect-mongo');
+const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
-const tradeRoutes = require('./routes/trades');
-const dashboardRoutes = require('./routes/dashboard');
+const methodOverride = require('method-override');
+require('dotenv').config();
 
-mongoose.connect(process.env.MONGODB_URI);
-mongoose.connection.on('connected', () => {
-    console.log(`Connected to MongoDB ${mongoose.connection.name}.`);
-});
-  
+const app = express();
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('MongoDB connection error:', err));
+
 // Middleware
 app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride('_method'));
-app.use(morgan('dev'));
+app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(methodOverride('_method'));
 
-// Session middleware
-app.use(session({
-      secret: process.env.SESSION_SECRET,
-      resave: false,
-      saveUninitialized: true,
-    cookie: { secure: process.env.NODE_ENV === 'production' }
-    }));
-
+// View engine setup
 app.use(expressLayouts);
-app.set('layout', 'layout'); 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.set('layout', 'layouts/main');
-app.use('/trades', tradeRoutes);
-app.use('/dashboard', dashboardRoutes);
+app.set('layout', 'layout');
 
-// Middleware to make user available to all templates
+// Session setup
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
+  cookie: { secure: process.env.NODE_ENV === 'production' }
+}));
+
+// Make user available to all templates
 app.use((req, res, next) => {
-    res.locals.user = req.session.user || null;
-    next();
+  res.locals.user = req.session.user || null;
+  next();
 });
 
 // Routes
-app.use('/', require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
+app.use('/dashboard', require('./routes/dashboard'));
 app.use('/trades', require('./routes/trades'));
+app.use('/', require('./routes/index'));
 
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
   });
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+

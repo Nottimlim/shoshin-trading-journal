@@ -12,4 +12,34 @@
   </div>
 
   <div class="mb-4">
-    <label for="exitPrice" class="block
+    <label for="entryDate" class="block text-gray-700 text-sm font-bold mb-2">Entry Date:</label>
+    <input type="date" id="entryDate" name="entryDate" value="<%= trade.entryDate.toISOString().split('T')[0] %>" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+  </div>
+
+  <div class="mb-4">
+    <label for="quantity" class="block text-gray-700 text-sm font-bold mb-2">Quantity:</label>
+    <input type="number" id="quantity" name="quantity" value="<%= trade.quantity %>" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+  </div>
+
+  <div class="mb-4">
+    <label for="exitPrice" class="block text-gray-700 text-sm font-bold mb-2">Exit Price:</label>
+    <input type="number" id="exitPrice" name="exitPrice" value="<%= trade.exitPrice %>" step="0.01" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+  </div>
+
+  <div class="mb-4">
+    <label for="exitDate" class="block text-gray-700 text-sm font-bold mb-2">Exit Date:</label>
+    <input type="date" id="exitDate" name="exitDate" value="<%= trade.exitDate ? trade.exitDate.toISOString().split('T')[0] : '' %>" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+  </div>
+
+  <div class="mb-4">
+    <label for="riskRewardRatio" class="block text-gray-700 text-sm font-bold mb-2">Risk/Reward Ratio:</label>
+    <input type="text" id="riskRewardRatio" name="riskRewardRatio" value="<%= trade.riskRewardRatio %>" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+  </div>
+
+  <div class="mb-4">
+    <label for="notes" class="block text-gray-700 text-sm font-bold mb-2">Notes:</label>
+    <textarea id="notes" name="notes" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" rows="4"><%= trade.notes %></textarea>
+  </div>
+
+  <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Update Trade</button>
+</form>
