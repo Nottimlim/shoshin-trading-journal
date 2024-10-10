@@ -21,10 +21,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'));
 
 // View engine setup
-app.use(expressLayouts);
+app.use(expressLayouts); //tailwind
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.set('layout', 'layout');
+app.set('layout', 'layout'); //using layout as my default layout for all views
 
 // Session setup
 app.use(session({
