@@ -48,3 +48,4 @@ Future enhancements planned for Shoshin Trading Journal include:
 4. Developing a mobile app for on-the-go trade logging
 5. Live News Tracker implementing forexfactory.com data
 6. Backtesting feature (SUPER STRETCH)
+7. Calendar feature on dashboard
