@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const tradeController = require('../controllers/tradeController');
+const tradeController = require('../controllers/tradeController.js');
 
 // Middleware to check if user is authenticated
 const isAuthenticated = (req, res, next) => {

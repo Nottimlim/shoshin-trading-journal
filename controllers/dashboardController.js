@@ -1,4 +1,4 @@
-const Trade = require('../models/Trade.js');
+const Trade = require("../models/Trade.js");
 
 exports.getDashboard = async (req, res) => {
   try {
