@@ -17,7 +17,7 @@ mongoose.connect(process.env.MONGODB_URI)
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
   .catch(err => console.error('MongoDB connection error:', err));
-  
+
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -36,7 +36,8 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
-  cookie: { secure: process.env.NODE_ENV === 'production' }
+  cookie: { secure: false }
+  // cookie: { secure: process.env.NODE_ENV === 'production' }
 }));
 
 // Make user available to all templates
