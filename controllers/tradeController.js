@@ -56,15 +56,7 @@ exports.getEditTradeForm = async (req, res) => {
     if (!trade) {
       return res.status(404).render('error', { error: 'Trade not found' });
     }
-    
-    const formattedTrade = {
-      ...trade.toObject(),
-      entryDate: trade.entryDate ? trade.entryDate.toISOString().split('T')[0] : '',
-      exitDate: trade.exitDate ? trade.exitDate.toISOString().split('T')[0] : '',
-      profitLoss: trade.profitLoss !== undefined ? trade.profitLoss : ''
-    };
-    
-    res.render('trades/edit', { trade: formattedTrade });
+    res.render('trades/edit', { trade });
   } catch (error) {
     console.error('Error fetching trade for edit:', error);
     res.status(500).render('error', { error: 'Error fetching trade for edit' });

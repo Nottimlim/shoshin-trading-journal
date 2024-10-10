@@ -4,7 +4,7 @@ const tradeController = require('../controllers/tradeController');
 
 // Middleware to check if user is authenticated
 const isAuthenticated = (req, res, next) => {
-  if (req.session.user) {
+  if (req.session && req.session.user) {
     return next();
   }
   res.redirect('/auth/login');
