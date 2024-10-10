@@ -26,7 +26,8 @@ exports.createTrade = async (req, res) => {
       profitLoss: inputProfitLoss ? parseFloat(inputProfitLoss) : 0,
       tradeType,
       entryDate,
-      exitDate: exitDate || undefined
+      exitDate: exitDate || undefined,
+      outcome
     });
 
     await newTrade.save();
@@ -85,7 +86,8 @@ exports.getEditTradeForm = async (req, res) => {
           profitLoss: profitLoss ? parseFloat(profitLoss) : undefined,
           tradeType,
           entryDate,
-          exitDate: exitDate || undefined
+          exitDate: exitDate || undefined,
+          outcome
         },
         { new: true, runValidators: true }
       );
