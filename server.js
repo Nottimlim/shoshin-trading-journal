@@ -37,20 +37,11 @@ app.use(session({
   saveUninitialized: false,
   store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
   cookie: { 
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    maxAge: 1000 * 60 * 60 * 24 // 24 hours
+    secure: false
+    // sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    // maxAge: 1000 * 60 * 60 * 24 // 24 hours
   }
 }));
-
-// CORS setup
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Credentials', true);
-  res.header('Access-Control-Allow-Origin', req.headers.origin);
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
-  next();
-});
 
 // Logging middleware
 app.use((req, res, next) => {
@@ -70,15 +61,5 @@ app.use('/auth', require('./routes/auth.js'));
 app.use('/dashboard', require('./routes/dashboard.js'));
 app.use('/trades', require('./routes/trades.js'));
 app.use('/', require('./routes/index.js'));
-
-// Error handling middleware
-app.use((err, req, res, next) => {
-  console.error('Error:', err);
-  console.error('Stack:', err.stack);
-  res.status(500).render('error', { 
-    message: 'An error occurred', 
-    error: process.env.NODE_ENV === 'development' ? err : {}
-  });
-});
 
 module.exports = app;
