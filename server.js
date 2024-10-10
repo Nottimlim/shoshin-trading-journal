@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3000;
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
-    console.log('Connected to MongoDB');
+    console.log('Connected to MongoDB')
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
   .catch(err => console.error('MongoDB connection error:', err));
@@ -25,10 +25,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'));
 
 // View engine setup
-app.use(expressLayouts);
+app.use(expressLayouts); //tailwind
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.set('layout', 'layout');
+app.set('layout', 'layout'); //using layout as my default layout for all views
 
 // Session setup
 app.use(session({
@@ -36,18 +36,9 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
-  cookie: { 
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
-  }
+  cookie: { secure: false }
+  // cookie: { secure: process.env.NODE_ENV === 'production' } // <- for deployment add certificate
 }));
-
-// Logging middleware
-app.use((req, res, next) => {
-  console.log('Session ID:', req.sessionID);
-  console.log('Session:', req.session);
-  next();
-});
 
 // Make user available to all templates
 app.use((req, res, next) => {
@@ -61,14 +52,11 @@ app.use('/dashboard', require('./routes/dashboard.js'));
 app.use('/trades', require('./routes/trades.js'));
 app.use('/', require('./routes/index.js'));
 
-// Error handling middleware
 app.use((err, req, res, next) => {
-  console.error('Error:', err);
-  console.error('Stack:', err.stack);
-  res.status(500).render('error', { 
-    message: 'An error occurred', 
-    error: process.env.NODE_ENV === 'development' ? err : {}
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
   });
-});
 
-module.exports = app;
+
+
+
