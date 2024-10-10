@@ -37,7 +37,7 @@ app.use(session({
   saveUninitialized: false,
   store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
   cookie: { secure: false }
-  // cookie: { secure: process.env.NODE_ENV === 'production' }
+  // cookie: { secure: process.env.NODE_ENV === 'production' } // <- for deployment add certificate
 }));
 
 // Make user available to all templates
