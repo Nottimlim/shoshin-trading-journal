@@ -42,10 +42,10 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use('/auth', require('./routes/auth'));
-app.use('/dashboard', require('./routes/dashboard'));
-app.use('/trades', require('./routes/trades'));
-app.use('/', require('./routes/index'));
+app.use('/auth', require('./routes/auth.js'));
+app.use('/dashboard', require('./routes/dashboard.js'));
+app.use('/trades', require('./routes/trades.js'));
+app.use('/', require('./routes/index.js'));
 
 app.use((err, req, res, next) => {
     console.error(err.stack);
